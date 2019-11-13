@@ -1,0 +1,40 @@
+<!--pages/hospitaliztion/hospitaliztion.wxml-->
+<view class='content'>
+  <view class='bar'>
+    <ec-canvas canvas-id='bar-cancas' ec="{{ bar_ec }}"></ec-canvas>
+  </view>
+  <view class='title'>按诊疗组统计本月</view>
+  <view class="table">
+    <view class="tr bg-w">
+      <view class="th">诊疗组</view>
+      <view class="th">出院人次</view>
+      <view class="th ">均值费</view>
+      <view class="th">药比</view>
+      <view class="th">平均床日</view>
+      <view class="th">基药比</view>
+    </view>
+    <scroll-view scroll-y style="height: 455.33rpx;">
+       <block wx:for="{{listData}}" wx:key="{{code}}">
+      <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+        <view class="td">{{item.code}}</view>
+        <view class="td">{{item.text}}</view>
+        <view class="td">{{item.type}}</view>
+        <view class="td">{{item.code}}</view>
+        <view class="td">{{item.text}}</view>
+        <view class="td">{{item.type}}</view>
+      </view>
+      <view class="tr" wx:else>
+        <view class="td">{{item.code}}</view>
+        <view class="td">{{item.text}}</view>
+        <view class="td">{{item.type}}</view>
+        <view class="td">{{item.code}}</view>
+        <view class="td">{{item.text}}</view>
+        <view class="td">{{item.type}}</view>
+      </view>
+    </block>
+    </scroll-view>
+  </view>
+</view>
+
+
+

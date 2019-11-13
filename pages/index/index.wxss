@@ -1,0 +1,53 @@
+/**index.wxss**/
+page{
+  width: 100%;
+  height: 100%;
+  /* background: blue; */
+}
+.content{
+  margin-top: 10rpx;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  overflow-x: hidden;
+  /* border-top: 2rpx solid #cccccc; */
+}
+.info ,.info-box,.gauge{
+  display:flex;
+  flex-direction:column;
+  align-items:center;/*垂直居中*/
+}
+.info{
+  width: 50%;
+  height: 30%;
+}
+.info-box{
+  margin-top: 20rpx;
+  width:50%;
+  background: #3366FF;
+  border: 2rpx solid rgb(123, 163, 236);
+  border-radius:10rpx; 
+}
+.gauge{
+  width: 45%;
+  height: 300rpx;
+}
+.pie{
+  width: 50%;
+  height: 300rpx;
+}
+.radar{
+  width: 100%;
+  height: 550rpx;
+}
+ec-canvas {
+  width: 100%;
+  height: 100%;
+}
+.line { 
+ width: 100%; 
+ height: 2rpx; 
+ background-color: #cccccc; 
+ /* margin-top: 2rpx;  */
+} 

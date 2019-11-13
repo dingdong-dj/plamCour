@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    
+    "pages/hospitaliztion/hospitaliztion",
+    "pages/outpatient/outpatient"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#CCCAAA",
+    "navigationBarTitleText": "掌上院务",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "总览"
+    },
+    {
+      "pagePath": "pages/hospitaliztion/hospitaliztion",
+      "text": "住院"
+    },{
+      "pagePath": "pages/outpatient/outpatient",
+      "text": "门急诊"
+    }]
+  },
+  "sitemapLocation": "sitemap.json"
+}
