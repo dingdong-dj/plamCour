@@ -1,16 +1,15 @@
 {
   "pages": [
-    "pages/login/login",
     "pages/index/index",
-    
+    "pages/login/login",
     "pages/hospitaliztion/hospitaliztion",
     "pages/outpatient/outpatient"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#CCCAAA",
+    "navigationBarBackgroundColor": "#004387",
     "navigationBarTitleText": "掌上院务",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "list": [{

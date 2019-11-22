@@ -49,6 +49,7 @@ Page({
 
   // 登录 
   login: function () {
+    console.log(this.data.phone);
     //验证验证码
     var res = this.mcaptcha.validate(this.data.imgCode);
     if (this.data.imgCode == '' || this.data.imgCode == null) {
@@ -69,7 +70,6 @@ Page({
       })
       return;
     }
-    console.log(this.data.phone + "   phone");
 
     if (this.data.phone.length == 0 || this.data.password.length == 0) {
       wx.showToast({
@@ -78,27 +78,63 @@ Page({
         image:'../../images/faul.png',
         duration: 2000
       })
+      // return
+      var role = ['我是院领导','我是科主任','我是医师'];
+      popSelect(role);
       wx.switchTab({
         url: '../index/index',
       })
-    } else {
-      // 这里修改成跳转的页面 
-      wx.showToast({
-        title: '登录成功',
-        icon: 'success',
-        duration: 2000
-      })
     }
-  }
+    wx.request({
+      url: '',
+      data:{
+        code: this.data.phone,
+        name: this.data.password
+      },
+      method:'POST',
+      header: {
+        //设置参数内容类型为json
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+          
+      },
+      fail: function (err) {
+        wx.showToast({
+          title: '网络错误',
+          icon: 'loading',
+          image: '../../images/faul.png',
+          duration: 2000
+        })
+      },//请求失败
+    })
+
+    // } else {
+    //   // 这里修改成跳转的页面 
+    //   wx.showToast({
+    //     title: '登录成功',
+    //     icon: 'success',
+    //     duration: 2000
+    //   })
+    // }
+  },
+  
 })
 
+  function popSelect(role){
+    wx.showActionSheet({
+      itemList: role,
+      success: function (res) {
+        console.log(role[res.tapIndex]);
+      }
+    })
+
+  }
   // formSubmit:function(){
   //   // wx.showToast({
   //   //   icon:"none",
   //   //   title: '该用户不存在',
   //   // })
-   
- 
   // }
 
   

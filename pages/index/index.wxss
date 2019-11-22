@@ -25,7 +25,7 @@ page{
 .info-box{
   margin-top: 20rpx;
   width:50%;
-  background: #3366FF;
+  background: #1890ff;
   border: 2rpx solid rgb(123, 163, 236);
   border-radius:10rpx; 
 }

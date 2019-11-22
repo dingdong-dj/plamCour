@@ -48,14 +48,12 @@ ec-canvas {
 }
 
 .bg-g{
-  background: #e1f5d7;
+  background: #d7eff5;
 }
-
 .th {
   width: 20%;
   justify-content: center;
-  background: #70B84C;
-  //background: #70B84C;
+  background:#1315b6;
   color: #fff;
   display: flex;
   height: 100rpx;

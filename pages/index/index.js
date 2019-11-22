@@ -8,26 +8,26 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    // infoList: [{ title: "在院人数费", number: 179 }, { title: "就诊人数", number: 66 }, { title: "预约挂号", number: 200 }, { title: "预约床位", number: 55 }, { title: "体检人数", number: 55 }, { title: "检查人次", number: 123 }],
-    infoList: [{ title: "在科人数", number: 45 }, { title: "门诊就诊", number: 66 }, { title: "入院人次", number: 200 }, { title: "出院人次", number: 55 }],
+    infoList: [{ title: "在院人数费", number: 179 }, { title: "就诊人数", number: 66 }, { title: "预约挂号", number: 200 }, { title: "预约床位", number: 55 }, { title: "体检人数", number: 55 }, { title: "检查人次", number: 123 }],
+    // infoList: [{ title: "在科人数", number: 45 }, { title: "门诊就诊", number: 66 }, { title: "入院人次", number: 200 }, { title: "出院人次", number: 55 }],
     // infoList: [{ title: "在科人数", number: 23 }, { title: "昨日就诊", number: 66 }, { title: "昨天收治", number: 23 }, { title: "昨天处方", number: 67 }, { title: "昨日诊察费", number: 1298 }, { title: "昨日检查费", number: 4567 }],
     gaugeList: [{ title: "抗菌使用率", data: 10 }, { title: "基药使用率", data: 25 }, { title: "床位使用率", data: 85 }, { title: "药比", data: 75 }, { title: "平均床日数", data: 60 }, { title: "平均处方金额", data: 65 }],
     gaugeList1: [{ title: "当前床位使用率", data: 82 }, { title: "门诊预约率", data: 78 }],
     pieList:[{title:"昨日住院/门诊收入",name:['住院','门诊','其他'],value:[12,20,3]},{title:'昨日门/急诊人次',name:['门诊','急诊','其他'],value:[20,30,10]}],
     radar_ec: {
-      onInit: initChart
+      onInit: initChart//雷达图
     },
     guage_econe_one:{
-      onInit: initGuage_one
+      onInit: initGuage_one//仪表盘图
     },
     guage_econe_two: {
       onInit: initGuage_two
     },
     gauge:{
-      onInit:initGauge
+      onInit: initGauge//公共仪表盘图标
     },
     pie: {
-      onInit: initPie
+      onInit: initPie//公共饼图
     },
     role:1,
   },
@@ -59,6 +59,7 @@ function initChart(canvas, width, height) {
         { name: "转科人数", max: 50 },
         { name: "入院人数", max: 50 }
       ],
+    
       // splitArea: {
       //   show: true,
       //   areaStyle: {
@@ -71,6 +72,8 @@ function initChart(canvas, width, height) {
     
     series: [{
       type: 'radar',
+      //symbol: 'circle', // 拐点的样式，还可以取值'rect','angle'等
+      // symbolSize: 3, // 拐点的大小
       data: [
         {
           value: [19, 6, 1, 43],
@@ -80,7 +83,12 @@ function initChart(canvas, width, height) {
               show: true
             }
           },
-          areaStyle: {normal: {color: 'rgba(255,0,0,0.6)'}}//数据区域颜色
+          itemStyle: {
+            normal: {
+              color: 'rgba(60,135,213,1)',
+            },
+          },
+          areaStyle: { normal: { color: 'rgba(24, 144, 255,0.6)'}}//数据区域颜色
         }
       ]
     }]
@@ -227,7 +235,7 @@ function initGauge(canvas, width, height, data) {
       },
       axisLine: {//仪表盘轴线
         lineStyle: {
-          // color: [[0.2, 'lime'], [0.8, '#1e90ff'], [1, '#ff4500']],
+          //color: [[0.2, 'lime'], [0.8, '#1e90ff'], [1, '#ff4500']],
           width: 15,
           // shadowColor: '#fff', //默认透明
           // shadowBlur: 10

@@ -14,24 +14,24 @@
       <view class="th">基药比</view>
     </view>
     <scroll-view scroll-y style="height: 455.33rpx;">
-       <block wx:for="{{listData}}" wx:key="{{code}}">
-      <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
-        <view class="td">{{item.code}}</view>
-        <view class="td">{{item.text}}</view>
-        <view class="td">{{item.type}}</view>
-        <view class="td">{{item.code}}</view>
-        <view class="td">{{item.text}}</view>
-        <view class="td">{{item.type}}</view>
-      </view>
-      <view class="tr" wx:else>
-        <view class="td">{{item.code}}</view>
-        <view class="td">{{item.text}}</view>
-        <view class="td">{{item.type}}</view>
-        <view class="td">{{item.code}}</view>
-        <view class="td">{{item.text}}</view>
-        <view class="td">{{item.type}}</view>
-      </view>
-    </block>
+      <block wx:for="{{listData}}" wx:key="{{code}}">
+        <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+          <view class="td">{{item.group_name}}</view>
+          <view class="td">{{item.outcnt}}</view>
+          <view class="td">{{item.avgfee}}</view>
+          <view class="td">{{item.yprate}}</view>
+          <view class="td">{{item.avgday}}</view>
+          <view class="td">{{item.jyrate}}</view>
+        </view>
+        <view class="tr" wx:else>
+          <view class="td">{{item.group_name}}</view>
+          <view class="td">{{item.outcnt}}</view>
+          <view class="td">{{item.avgfee}}</view>
+          <view class="td">{{item.yprate}}</view>
+          <view class="td">{{item.avgday}}</view>
+          <view class="td">{{item.jyrate}}</view>
+        </view>
+      </block>
     </scroll-view>
   </view>
 </view>

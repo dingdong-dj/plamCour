@@ -2,7 +2,7 @@
 
 <view class="container1"> 
   <view class="login-icon"> 
-  <image class="login-img" src="../../images/hosp.jpg"></image> 
+  <image class="login-img" src="../../images/rmyy.jpg"></image> 
   </view> 
   <view class="login-from"> 
   
@@ -22,18 +22,23 @@
   </view> 
   <view class="line"></view> 
   <!-- 验证码 -->
-  <view class="inputView">
+  <view class="inputView1">
     <image class="keyImage" src="../../images/code.png"></image> 
     <label class="loginLab">验证码</label> 
     <input class="inputText1" placeholder="请输入验证码" bindinput="codeImgInput" /> 
   </view>
   <view style="position:relative;" bindtap="onTap" class='can'>
-      <canvas style="width:160rpx;height:70rpx;position:absolute;right:0rpx;bottom:10rpx;text-align: center;z-index:9999;" canvas-id="canvas"></canvas>
+      <canvas style="width:180rpx;height:70rpx;position:absolute;right:0rpx;bottom:10rpx;text-align: center;z-index:9999;" canvas-id="canvas"></canvas>
+  </view>
+  <view class="section">
+    <view class="body-view">
+      <switch type="checkbox"/>允许此后本微信号直接登录
+    </view>
   </view>
   
   <!--按钮-->
   <view class="loginBtnView"> 
-    <button class="loginBtn" type="primary" size="{{primarySize}}" loading="{{loading}}" plain="{{plain}}" disabled="{{disabled}}" bindtap="login">登录</button> 
+    <button class="loginBtn" size="{{primarySize}}" bindtap="login">登录</button> 
   </view> 
   </view> 
 </view>

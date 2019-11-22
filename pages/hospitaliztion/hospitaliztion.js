@@ -119,19 +119,21 @@ Page({
     },
     listData: [
 
-      { "code": "01", "text": "6", "type": "20" },
-
-      { "code": "02", "text": "7", "type": "25" },
-
-      { "code": "03", "text": "8", "type": "13" },
-
-      { "code": "04", "text": "9", "type": "14" },
-
-      { "code": "05", "text": "3", "type": "16" },
-
-      { "code": "06", "text": "2", "type": "17" },
-
-      { "code": "07", "text": "1", "type": "19" }
+      { "group_name": "阮雅文诊疗组", "outcnt": "83", "avgfee": "8566.96", "yprate": "17.60","avgday": "7.30", "jyrate": "10.45" },
+      { "group_name": "李宏斌诊疗组", "outcnt": "35", "avgfee": "19902.69", "yprate": "16.21", "avgday": "10.80", "jyrate": "9.82" },
+      { "group_name": "朱国庆诊疗组", "outcnt": "61", "avgfee": "19064.81", "yprate": "17.29", "avgday": "8.30", "jyrate": "15.13" }, 
+      { "group_name": "吕佐诊疗组", "outcnt": "73", "avgfee": "16395.57", "yprate": "13.48", "avgday": "7.30", "jyrate": "6.27" }, 
+      { "group_name": "陈巍诊疗组", "outcnt": "153", "avgfee": "5861.75", "yprate": "22.97", "avgday": "4.90", "jyrate": "4.02" }, 
+      { "group_name": "张凯杰诊疗组", "outcnt": "70", "avgfee": "8088.86", "yprate": "46.71", "avgday": "6.70", "jyrate": "14.75" },
+      { "group_name": "裘宇芳诊疗组", "outcnt": "82", "avgfee": "11328.72", "yprate": "13.91", "avgday": "7", "jyrate": "19.57" }, 
+      { "group_name": "肖桂荣诊疗组", "outcnt": "61", "avgfee": "11231.41", "yprate": "36.76", "avgday": "9.80", "jyrate": "11.68" }, 
+      { "group_name": "丁国娟诊疗组", "outcnt": "3", "avgfee": "254630.23", "yprate": "53.63", "avgday": "99.70", "jyrate": "3.45" }, 
+      { "group_name": "吕杰青诊疗组", "outcnt": "92", "avgfee": "13766.81", "yprate": "35.74", "avgday": "7.50", "jyrate": "11.09" }, 
+      { "group_name": "阮学东诊疗组", "outcnt": "85", "avgfee": "2397.98", "yprate": "19.29", "avgday": "4.60", "jyrate": "22.02" }, 
+      { "group_name": "周军庆诊疗组", "outcnt": "21", "avgfee": "37789", "yprate": "22.43", "avgday": "12.40", "jyrate": "9.99" }, 
+      { "group_name": "应向荣诊疗组", "outcnt": "92", "avgfee": "12051.35", "yprate": "24.23", "avgday": "6.90", "jyrate": "4.79" }, 
+      { "group_name": "李锦泉诊疗组", "outcnt": "36", "avgfee": "28754.22", "yprate": "19", "avgday": "17.10", "jyrate": "10.53" }, 
+      { "group_name": "俞学斌诊疗组", "outcnt": "49", "avgfee": "22996.55", "yprate": "15.90", "avgday": "12.90", "jyrate": "20.92" }
 
     ]
   }

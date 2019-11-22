@@ -31,6 +31,10 @@ page{
  background-color: #fff; 
  line-height: 88rpx; 
 } 
+.inputView1 { 
+ background-color: #fff; 
+ line-height: 100rpx; 
+} 
 /*输入框*/
 .nameImage, .keyImage { 
  margin-left: 44rpx; 
@@ -50,7 +54,7 @@ page{
   text-align: right; 
   margin-right: 44rpx; 
   margin-top: 20rpx; 
-  color: #cccccc; 
+  color: #2e0404; 
   font-size: 30rpx;
 } 
 .inputText1 { 
@@ -59,7 +63,7 @@ page{
   float:right; 
   text-align: left; 
   margin-top: 20rpx; 
-  color: #cccccc; 
+  color: #2e0404; 
   font-size: 30rpx;
 } 
   
@@ -80,6 +84,18 @@ page{
 } 
   
 .loginBtn { 
- width: 80%; 
- margin-top: 70rpx; 
+  background-color:#23bddf;
+  color: white;
+  width: 80%; 
+  margin-top: 70rpx; 
+}
+.body-view{
+  font-size: 15px;
+  font-family:Courier;
+}
+.section{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
 }
