@@ -1,9 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/login/login",
     "pages/hospitaliztion/hospitaliztion",
-    "pages/outpatient/outpatient"
+    "pages/outpatient/outpatient",
+    "pages/login/login",
+    "pages/indexDetail/indexDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

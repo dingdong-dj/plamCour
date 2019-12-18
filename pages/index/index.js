@@ -1,27 +1,23 @@
 //index.js
 import * as echarts from '../../ec-canvas/echarts';
+var util = require('../../utils/util.js');
+var Parser = require('../../lib/dom-parser.js');
+var randerList = []
 
-//获取应用实例
+//获取用实例
 const app = getApp();
 Page({
   data: {
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    infoList: [{ title: "在院人数费", number: 179 }, { title: "就诊人数", number: 66 }, { title: "预约挂号", number: 200 }, { title: "预约床位", number: 55 }, { title: "体检人数", number: 55 }, { title: "检查人次", number: 123 }],
+    infoList: [{ name: "在院人数", value: 0 }, { name: "就诊人数", value: 0 }, { name: "预约挂号", value: 0 }, { name: "手术台数", value: 0 }],
     // infoList: [{ title: "在科人数", number: 45 }, { title: "门诊就诊", number: 66 }, { title: "入院人次", number: 200 }, { title: "出院人次", number: 55 }],
     // infoList: [{ title: "在科人数", number: 23 }, { title: "昨日就诊", number: 66 }, { title: "昨天收治", number: 23 }, { title: "昨天处方", number: 67 }, { title: "昨日诊察费", number: 1298 }, { title: "昨日检查费", number: 4567 }],
     gaugeList: [{ title: "抗菌使用率", data: 10 }, { title: "基药使用率", data: 25 }, { title: "床位使用率", data: 85 }, { title: "药比", data: 75 }, { title: "平均床日数", data: 60 }, { title: "平均处方金额", data: 65 }],
-    gaugeList1: [{ title: "当前床位使用率", data: 82 }, { title: "门诊预约率", data: 78 }],
-    pieList:[{title:"昨日住院/门诊收入",name:['住院','门诊','其他'],value:[12,20,3]},{title:'昨日门/急诊人次',name:['门诊','急诊','其他'],value:[20,30,10]}],
+    // randerInfo:[0,0,0,0],
     radar_ec: {
-      onInit: initChart//雷达图
-    },
-    guage_econe_one:{
-      onInit: initGuage_one//仪表盘图
-    },
-    guage_econe_two: {
-      onInit: initGuage_two
+      lazyLoad: true // 延迟加载
     },
     gauge:{
       onInit: initGauge//公共仪表盘图标
@@ -31,11 +27,144 @@ Page({
     },
     role:1,
   },
-  onShareAppMessage: function () {
-    return {
-      title: "qwee"
+  onLoad: function () {
+    var url = app.globalData.url;
+    var that = this;
+    var nowTime = new Date();
+    nowTime.setTime(nowTime.getTime() - 24 * 60 * 60 * 1000);
+    var time = nowTime.getFullYear() + "" + (nowTime.getMonth() + 1) + "" + nowTime.getDate();
+    var htmlBody = util.bodyHtml("Leader_FirstPage", '{"date":' + time + '}');
+    wx.request({
+      url: url,
+      data: htmlBody,
+      method: 'POST',
+      header: {
+        //设置参数内容类型为json
+        'content-type': 'text/xml; charset=utf-8',
+        //'SOAPAction': 'http://tempuri.org/Call'
+      },
+      success: function (res) {
+        var pieList =[];
+        var data = xmlToJson(res.data);
+        console.log(data);
+        for(var index in data){
+          if(data[index].type== "1"){
+            that.setData({
+              infoList:data[index].list
+            })
+          }else if(data[index].type == "2"){
+            that.setData({
+              gaugeList1:data[index].list
+            })
+          }else if(data[index].type == "3"){
+            var name = [];
+            var value =[];
+            var list = data[index].list;
+            for(var i in list){
+              name.push(list[i].name);
+              value.push(list[i].value);
+            }
+            pieList.push({ title: "昨日住院/门诊收入",name:name,value:value});
+          }else if(data[index].type == "4"){
+            var name = [];
+            var value = [];
+            var list = data[index].list;
+            for (var i in list) {
+              name.push(list[i].name);
+              value.push(list[i].value);
+            }
+            pieList.push({ title: "昨日门/急诊人次", name: name, value: value });
+          }else if(data[index].type == "5"){
+            var list = data[index].list;
+            var name = [];
+            var value = [];
+            for(var i in list){
+              name.push(list[i].name);
+              value.push(list[i].value);
+            }
+            randerList = {name:name.slice(1),value:value.slice(1)};
+            that.echartsComponnet = that.selectComponent('#radar-cancas-id');
+            that.init_echarts();
+          }
+        }
+        that.setData({
+          pieList:pieList
+        })
+      }
+    })
+  },
+
+  init_echarts: function () {
+    this.echartsComponnet.init((canvas, width, height) => {
+      // 初始化图表
+      const Chart = echarts.init(canvas, null, {
+        width: width,
+        height: height
+      });
+      Chart.setOption(this.getOption());
+      // // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      // return Chart;
+    });
+  },
+  getOption:function(){
+    console.log(randerList.name);
+    var name = randerList.name;
+    var option = {
+      title: {
+        text: "昨日住院人次统计",
+        textStyle: {
+          fontSize: 15,
+        }
+      },
+      radar: {
+        indicator: [
+          { name: name[0], max: 300 },
+          { name: name[1], max: 300 },
+          { name: name[2], max: 300 },
+          { name: name[3], max: 300 }
+        ],
+      },
+
+      series: [{
+        type: 'radar',
+        //symbol: 'circle', // 拐点的样式，还可以取值'rect','angle'等
+        // symbolSize: 3, // 拐点的大小
+        data: [
+          {
+            value: randerList.value,
+            name: "人数",
+            label: {
+              normal: {
+                show: true
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(60,135,213,1)',
+              },
+            },
+            areaStyle: { normal: { color: 'rgba(24, 144, 255,0.6)' } }//数据区域颜色
+          }
+        ]
+      }]
     }
-  }
+
+    return option;
+  },
+
+  // onShareAppMessage: function () {
+  //   return {
+  //     title: "qwee"
+  //   }
+  // },
+  bindViewTap:function(e){
+    var title = e.currentTarget.dataset.title;
+    var number = e.currentTarget.dataset.number;
+    wx.navigateTo({
+      url: '../indexDetail/indexDetail?title='+title+'&number='+number
+    })
+  },
+
 })
 
 //雷达图
@@ -54,10 +183,10 @@ function initChart(canvas, width, height) {
     },
     radar: {
       indicator: [
-        { name: "出院人数", max: 50 },
-        { name: "手术人数", max: 50 },
-        { name: "转科人数", max: 50 },
-        { name: "入院人数", max: 50 }
+        { name: "出院人数", max: 300 },
+        { name: "手术人数", max: 300 },
+        { name: "转科人数", max: 300 },
+        { name: "入院人数", max: 300 }
       ],
     
       // splitArea: {
@@ -76,7 +205,7 @@ function initChart(canvas, width, height) {
       // symbolSize: 3, // 拐点的大小
       data: [
         {
-          value: [19, 6, 1, 43],
+          value: data,
           name: "人数",
           label: {
             normal: {
@@ -97,116 +226,6 @@ function initChart(canvas, width, height) {
   return chart;
 }
 
-//仪表盘图
-function initGuage_one(canvas, width, height) {
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height
-  });
-  canvas.setChart(chart);
-
-  var option = {
-    title:{
-      text:'当前床位使用率',
-      x:'center',
-      y:'bottom',
-      textStyle: {
-        fontSize: 15,
-      }
-    },
-    series: [{
-      type: 'gauge',
-      detail: {
-        formatter: '{value}%',
-        fontSize: 20,
-        offsetCenter: [0, "60%"],
-      },
-      axisLine: {//仪表盘轴线
-        lineStyle: {
-          width: 15,
-        }
-      },
-      axisTick: {//小刻度相关
-        length: 4,
-      },
-      splitLine: {//分隔线样式相关
-        length: 30,//分割线的长度
-        lineStyle: {
-          width: 2,
-        }
-      },
-      axisLabel: {
-        show: false
-      },
-      pointer: {//指针长度与宽度
-        width: 3,
-        length: '85%'
-      },
-      data: [{
-        value: 60,
-      }]
-
-    }]
-  };
-  chart.setOption(option, true);
-  return chart;
-}
-
-function initGuage_two(canvas, width, height) {
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height
-  });
-  canvas.setChart(chart);
-
-  var option = {
-    title: {
-      text: '门诊预约率',
-      x: 'center',
-      y: 'bottom',
-      textStyle: {
-        fontSize: 15
-      }
-    },
-    series: [{
-      type: 'gauge',
-      detail: {
-        formatter: '{value}%',
-        fontSize: 20,
-        offsetCenter: [0, "60%"]
-      },
-      axisLine: {//仪表盘轴线
-        lineStyle: {
-          width: 15,
-        }
-      },
-      axisTick: {//小刻度相关
-        length: 4,
-      },
-      splitLine: {//分隔线样式相关
-        length: 30,//分割线的长度
-        lineStyle: {
-          width: 2,
-        }
-      },
-      axisLabel: {
-        show: false
-      },
-      pointer: {//指针长度与宽度
-        width: 3,
-        length: '85%'
-      },
-      data: [{
-        value: 30,
-      }]
-
-    }]
-  };
-  chart.setOption(option, true);
-  return chart;
-}
-
-
 //公共仪表盘图标
 function initGauge(canvas, width, height, data) {
   const chart = echarts.init(canvas, null, {
@@ -217,12 +236,11 @@ function initGauge(canvas, width, height, data) {
   // console.log(data.title+data.data);
   var option = {
     title: {
-      text: data.title,
+      text: data.name,
       x: 'center',
       y: 'bottom',
       textStyle: {
         fontSize: 15,
-        // color:"#eceff8"
       }
     },
     series: [{
@@ -235,8 +253,8 @@ function initGauge(canvas, width, height, data) {
       },
       axisLine: {//仪表盘轴线
         lineStyle: {
-          //color: [[0.2, 'lime'], [0.8, '#1e90ff'], [1, '#ff4500']],
-          width: 15,
+          color: [[0.2, '#95c3ee'], [0.8, '#72abe0'], [1, '#4a8ac5']],
+          width: 15,  
           // shadowColor: '#fff', //默认透明
           // shadowBlur: 10
         }
@@ -263,7 +281,7 @@ function initGauge(canvas, width, height, data) {
         length: '90%',
       },
       data: [{
-        value: data.data,
+        value: data.value,
       }]
 
     }]
@@ -292,7 +310,7 @@ function initPie(canvas, width, height,data) {
       trigger: 'item',
       formatter: "{d}%",
     },
-    color: ["#AAA2DA", "#32C5E9", "#AAE0E3"],
+    color: ["#4a8ac5","#95c3ee"],
     series: [
       {
         name: '访问来源',
@@ -300,8 +318,7 @@ function initPie(canvas, width, height,data) {
         radius: '75%',
         data: [
           { value: data.value[0], name: data.name[0] },
-          { value: data.value[1], name: data.name[1] },
-          { value: data.value[2], name: data.name[2] }
+          { value: data.value[1], name: data.name[1] }
         ],
         label: {            //饼图图形上的文本标签
           normal: {
@@ -310,7 +327,7 @@ function initPie(canvas, width, height,data) {
             textStyle: {
               fontSize: 10   //文字的字体大小
             },
-            formatter: "{b}:{c}\n({d}%)"
+            formatter: "{b}\n{c}\n({d}%)"
           }
         },
       }
@@ -318,4 +335,45 @@ function initPie(canvas, width, height,data) {
   };
   chart.setOption(option);
   return chart;
+}
+
+//组参
+function bodyHtml(type,param){
+  var htmlBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/"><soapenv:Header/><soapenv:Body><tem:Call><tem:type>';
+  htmlBody  += type+'</tem:type><tem:parms>';
+  htmlBody += param;
+  htmlBody += '</tem:parms></tem:Call></soapenv:Body></soapenv:Envelope>';
+  return htmlBody;
+}
+//xml转json
+function xmlToJson(xml){
+  var dataxml = xml;
+  var XMLParser = new Parser.DOMParser();
+  var doc = XMLParser.parseFromString(dataxml);
+  var a = doc.getElementsByTagName('CallResult')['0'];
+  var b = a.firstChild.nodeValue;
+  return JSON.parse(b);
+}
+
+
+function getPie(url,param,title) {
+  return new Promise(function (resolve, reject) {
+    wx.request({
+      url: url,
+      data: param,
+      method: 'POST',
+      header: {
+        'content-type': 'text/xml; charset=utf-8',
+      },
+      success: (res) => {
+        var pieList = xmlToJson(res.data);
+        console.log(pieList);
+        resolve(pieList);
+      },
+      fail: () => {
+        reject("系统异常，请重试！")
+      }
+    })
+  })
+
 }

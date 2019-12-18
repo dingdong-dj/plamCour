@@ -1,7 +1,7 @@
 <!--pages/hospitaliztion/hospitaliztion.wxml-->
 <view class='content'>
   <view class='bar'>
-    <ec-canvas canvas-id='bar-cancas' ec="{{ bar_ec }}"></ec-canvas>
+    <ec-canvas id="bar-canca" canvas-id='bar-cancas' ec="{{ bar_ec }}"></ec-canvas>
   </view>
   <view class='title'>按诊疗组统计本月</view>
   <view class="table">

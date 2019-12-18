@@ -24,10 +24,12 @@ page{
 }
 .info-box{
   margin-top: 20rpx;
-  width:50%;
-  background: #1890ff;
-  border: 2rpx solid rgb(123, 163, 236);
+  width:60%;
+  /* background-image: linear-gradient(to bottom right, rgb(102, 214, 235),rgb(135, 161, 242)); */
+  background-image: linear-gradient(to bottom right, #95c3ee,#4a8ac5);
+  border: 2rpx solid #7ba3ec;
   border-radius:10rpx; 
+  
 }
 .gauge{
   width: 45%;
@@ -50,4 +52,11 @@ ec-canvas {
  height: 2rpx; 
  background-color: #cccccc; 
  /* margin-top: 2rpx;  */
+}
+.title12{
+  color: rgb(243, 237, 237);
 } 
+.number{
+  text-decoration-line: underline;
+  color: rgb(243, 237, 237);
+}

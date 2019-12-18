@@ -1,141 +1,246 @@
 // pages/hospitaliztion/hospitaliztion.js
 import * as echarts from '../../ec-canvas/echarts';
 const app = getApp()
+var util = require('../../utils/util.js');
+var Parser = require('../../lib/dom-parser.js');
+var dataList = [];
 
-function initChart(canvas, width, height) {
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height
-  });
-  canvas.setChart(chart);
-
-  var option = {
-    title: {
-      text: '昨日住院及门诊次数统计(按科室分)',
-      textStyle: {
-        fontSize:15,
-      }
-    },
-    legend: {
-      data: ['入院', '出院', '在院'],
-      icon: "roundRect",
-      x: "300rpx"
-    },
-    color: ['#33ccff', '#ffff99', '#ff6699'],
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow'
-      }
-    },
-    calculable: true,
-    xAxis: [{
-      name: "病区",
-      type: 'category',
-      axisTick: { show: false },
-      data: ['妇产科病区', '眼科病区', '耳鼻喉科病区', '内科综合病区'],
-      axisLabel: {
-        interval: 0,
-        // formatter: function (value) {
-        //   return value.split("").join("\n");
-        // }
-        // rotate: -40
-      }
-    }],
-    yAxis: [{
-      name: "住院人次(个)",
-      type: 'value'
-    }],
-    series: [{
-      name: '入院',
-      type: 'bar',
-      barGap: 0,
-      data: [7, 23, 8, 5],
-      barWidth: 15,
-      itemStyle: {
-        normal: {
-          label: {
-            show: true,		//开启显示
-            position: 'top',	//在上方显示
-            textStyle: {	    //数值样式
-              color: 'black',
-              fontSize: 12
-            }
-          }
-        }
-      }
-    },
-    {
-      name: '出院',
-      type: 'bar',
-      data: [1, 9, 3, 6],
-      barWidth: 15,
-      itemStyle: {
-        normal: {
-          label: {
-            show: true,		//开启显示
-            position: 'top',	//在上方显示
-            textStyle: {	    //数值样式
-              color: 'black',
-              fontSize: 12
-            }
-          }
-        }
-      }
-    },
-    {
-      name: '在院',
-      type: 'bar',
-      data: [21, 30, 41, 32],
-      barWidth: 15,
-      itemStyle: {
-        normal: {
-          label: {
-            show: true,		//开启显示
-            position: 'top',	//在上方显示
-            textStyle: {	    //数值样式
-              color: 'black',
-              fontSize: 12
-            }
-          }
-        }
-      }
-    },]
-
-  };
-
-  chart.setOption(option, true);
-
-  return chart;
-}
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     bar_ec:{
-      onInit: initChart
+      lazyLoad: true // 延迟加载
     },
     listData: [
-
-      { "group_name": "阮雅文诊疗组", "outcnt": "83", "avgfee": "8566.96", "yprate": "17.60","avgday": "7.30", "jyrate": "10.45" },
-      { "group_name": "李宏斌诊疗组", "outcnt": "35", "avgfee": "19902.69", "yprate": "16.21", "avgday": "10.80", "jyrate": "9.82" },
-      { "group_name": "朱国庆诊疗组", "outcnt": "61", "avgfee": "19064.81", "yprate": "17.29", "avgday": "8.30", "jyrate": "15.13" }, 
-      { "group_name": "吕佐诊疗组", "outcnt": "73", "avgfee": "16395.57", "yprate": "13.48", "avgday": "7.30", "jyrate": "6.27" }, 
-      { "group_name": "陈巍诊疗组", "outcnt": "153", "avgfee": "5861.75", "yprate": "22.97", "avgday": "4.90", "jyrate": "4.02" }, 
-      { "group_name": "张凯杰诊疗组", "outcnt": "70", "avgfee": "8088.86", "yprate": "46.71", "avgday": "6.70", "jyrate": "14.75" },
-      { "group_name": "裘宇芳诊疗组", "outcnt": "82", "avgfee": "11328.72", "yprate": "13.91", "avgday": "7", "jyrate": "19.57" }, 
-      { "group_name": "肖桂荣诊疗组", "outcnt": "61", "avgfee": "11231.41", "yprate": "36.76", "avgday": "9.80", "jyrate": "11.68" }, 
-      { "group_name": "丁国娟诊疗组", "outcnt": "3", "avgfee": "254630.23", "yprate": "53.63", "avgday": "99.70", "jyrate": "3.45" }, 
-      { "group_name": "吕杰青诊疗组", "outcnt": "92", "avgfee": "13766.81", "yprate": "35.74", "avgday": "7.50", "jyrate": "11.09" }, 
-      { "group_name": "阮学东诊疗组", "outcnt": "85", "avgfee": "2397.98", "yprate": "19.29", "avgday": "4.60", "jyrate": "22.02" }, 
-      { "group_name": "周军庆诊疗组", "outcnt": "21", "avgfee": "37789", "yprate": "22.43", "avgday": "12.40", "jyrate": "9.99" }, 
-      { "group_name": "应向荣诊疗组", "outcnt": "92", "avgfee": "12051.35", "yprate": "24.23", "avgday": "6.90", "jyrate": "4.79" }, 
-      { "group_name": "李锦泉诊疗组", "outcnt": "36", "avgfee": "28754.22", "yprate": "19", "avgday": "17.10", "jyrate": "10.53" }, 
-      { "group_name": "俞学斌诊疗组", "outcnt": "49", "avgfee": "22996.55", "yprate": "15.90", "avgday": "12.90", "jyrate": "20.92" }
-
+      { "group_name": "网络错误", "outcnt": "0", "avgfee": "0", "yprate": "0","avgday": "0", "jyrate": "0" }
     ]
-  }
+  },
+  onLoad:function(){
+    var url = app.globalData.url;
+    console.log(app.globalData.url);
+    var that = this;
+    var nowTime = new Date();
+    nowTime.setTime(nowTime.getTime() - 24 * 60 * 60 * 1000);
+    var time = nowTime.getFullYear() + "" + (nowTime.getMonth() + 1) + "" + nowTime.getDate();
+    var htmlBody = bodyHtml("Leader_DeptZyData", '{"date":' + time + '}');
+    // console.log(htmlBody);
+    this.echartsComponnet = this.selectComponent('#bar-canca');
+    this.getData(); //获取数据
+  },
+
+  getData: function () {
+    var url = app.globalData.url;
+    var nowTime = new Date();
+    nowTime.setTime(nowTime.getTime() - 24 * 60 * 60 * 1000);
+    var time = nowTime.getFullYear() + "" + (nowTime.getMonth() + 1) + "" + nowTime.getDate();
+    var htmlBody = util.bodyHtml("Leader_DeptZyData", '{"date":' + time + '}');
+    var that = this;
+  	/**
+  	 * 此处的操作：
+  	 * 获取数据json
+  	 */
+    wx.request({
+      url: url, //仅为示例，并非真实的接口地址
+      data: htmlBody,
+      method: 'POST',
+      header: {
+        'content-type': 'text/xml; charset=utf-8',
+      },
+      success: (res) => {
+        var list = xmlToJson(res.data);
+        var name = [];
+        var incnt = [];
+        var outcnt =[];
+        var nowcnt =[];
+        for (var index in list) {
+          name.push(list[index].deptname.trim());
+          incnt.push(list[index].incnt == null ? "0" : list[index].incnt );
+          outcnt.push(list[index].outcnt == null ? "0" : list[index].outcnt );
+          nowcnt.push(list[index].nowcnt == null ? "0" : list[index].nowcnt );
+        }
+        var barList = { name: name, incnt: incnt ,outcnt :outcnt,nowcnt:nowcnt};
+        dataList = barList;
+        that.init_echarts();//初始化图表
+      }
+    });
+  },
+  //初始化图表
+  init_echarts: function () {
+    this.echartsComponnet.init((canvas, width, height) => {
+      // 初始化图表
+      const Chart = echarts.init(canvas, null, {
+        width: width,
+        height: height
+      });
+      Chart.setOption(this.getOption());
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return Chart;
+    });
+  },
+  getOption: function () {
+    var option = {
+      title: {
+        text: '昨日住院及门诊次数统计(按科室分)',
+        textStyle: {
+          fontSize: 15,
+        }
+      },
+      legend: {
+        data: ['入院', '出院', '在院'],
+        icon: "roundRect",
+        x: "300rpx"
+      },
+      color: ['#95c3ee', '#6ca2d4', '#4a8ac5'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      calculable: true,
+      xAxis: [{
+        name: "病区",
+        type: 'category',
+        axisTick: { show: false },
+        data:dataList.name,
+        axisLabel: {
+          interval: 0,
+          // rotate: -20,
+          formatter: function (value) {
+            var result = "";//拼接加\n返回的类目项
+            var maxLength = 4;//每项显示文字个数
+            var valLength = value.length;//X轴类目项的文字个数
+            var rowNumber = Math.ceil(valLength / maxLength); //类目项需要换行的行数
+            if (rowNumber > 1)//如果文字大于3,
+            {
+              for (var i = 0; i < rowNumber; i++) {
+                var temp = "";//每次截取的字符串
+                var start = i * maxLength;//开始截取的位置
+                var end = start + maxLength;//结束截取的位置
+                temp = value.substring(start, end) + "\n";
+                result += temp; //拼接生成最终的字符串
+              }
+              return result;
+            }
+            else {
+              return value;
+            }
+          }
+        }
+      }],
+      yAxis: [{
+        name: "住院人次(个)",
+        type: 'value'
+      }],
+      dataZoom: [
+        {
+          show: true,
+          type: 'inside',
+          start: 0, //数据窗口范围的起始百分比,表示30% 
+          end: 10, //数据窗口范围的结束百分比,表示70% 
+        }
+      ],
+      series: [{
+        name: '入院',
+        type: 'bar',
+        barGap: 0,
+        data: dataList.incnt,
+        barWidth: 15,
+        itemStyle: {
+          normal: {
+            label: {
+              show: true,		//开启显示
+              position: 'top',	//在上方显示
+              textStyle: {	    //数值样式
+                color: 'black',
+                fontSize: 12
+              }
+            }
+          }
+        }
+      },
+      {
+        name: '出院',
+        type: 'bar',
+        data: dataList.outcnt,
+        barWidth: 15,
+        itemStyle: {
+          normal: {
+            label: {
+              show: true,		//开启显示
+              position: 'top',	//在上方显示
+              textStyle: {	    //数值样式
+                color: 'black',
+                fontSize: 12
+              }
+            }
+          }
+        }
+      },
+      {
+        name: '在院',
+        type: 'bar',
+        data: dataList.nowcnt,
+        barWidth: 15,
+        itemStyle: {
+          normal: {
+            label: {
+              show: true,		//开启显示
+              position: 'top',	//在上方显示
+              textStyle: {	    //数值样式
+                color: 'black',
+                fontSize: 12
+              }
+            }
+          }
+        }
+      },]
+
+    };
+    return option;
+  },
 
 })
+
+//组参
+function bodyHtml(type, param) {
+  var htmlBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/"><soapenv:Header/><soapenv:Body><tem:Call><tem:type>';
+  htmlBody += type + '</tem:type><tem:parms>';
+  htmlBody += param;
+  htmlBody += '</tem:parms></tem:Call></soapenv:Body></soapenv:Envelope>';
+  return htmlBody;
+}
+
+function DeptZyData(url, param) {
+  return new Promise(function (resolve, reject) {
+    wx.request({
+      url: url,
+      data: param,
+      method: 'POST',
+      header: {
+        'content-type': 'text/xml; charset=utf-8',
+      },
+      success: (res) => {
+        var pieList = xmlToJson(res.data);
+        console.log(pieList);
+        resolve(pieList);
+      },
+      fail: () => {
+        reject("系统异常，请重试！")
+      }
+    })
+  })
+
+}
+
+//xml转json
+function xmlToJson(xml) {
+  var dataxml = xml;
+  var XMLParser = new Parser.DOMParser();
+  var doc = XMLParser.parseFromString(dataxml);
+  var a = doc.getElementsByTagName('CallResult')['0'];
+  var b = a.firstChild.nodeValue;
+  return JSON.parse(b);
+}

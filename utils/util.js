@@ -1,3 +1,4 @@
+
 const formatTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -25,6 +26,15 @@ function regexConfig() {
 }
 module.exports = {
   formatTime: formatTime,
-  regexConfig: regexConfig
+  regexConfig: regexConfig,
+  bodyHtml: bodyHtml
+}
 
+//组参
+function bodyHtml(type, param) {
+  var htmlBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/"><soapenv:Header/><soapenv:Body><tem:Call><tem:type>';
+  htmlBody += type + '</tem:type><tem:parms>';
+  htmlBody += param;
+  htmlBody += '</tem:parms></tem:Call></soapenv:Body></soapenv:Envelope>';
+  return htmlBody;
 }

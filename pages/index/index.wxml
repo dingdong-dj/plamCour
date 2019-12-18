@@ -1,9 +1,9 @@
 <!--index.wxml-->
 <view class='content'>
-  <view class='info' wx:for="{{infoList}}" wx:key="infoList" >
+  <view class='info' wx:for="{{infoList}}" wx:key="infoList123" >
     <view class='info-box'>
-      <view>{{item.title}}</view>
-      <view>{{item.number}}</view>
+      <text class="title12" >{{item.name}}</text>
+      <text class="number" bindtap="bindViewTap" data-number='{{item.name}}' data-title='{{item.name}}'>{{item.value}}</text>
     </view>
   </view>
 </view>
@@ -28,7 +28,7 @@
   </view>
   <view class='content'>
     <view class = 'radar'>
-        <ec-canvas id = 'radar-cancas-id'canvas-id='radar-cancas' ec="{{ radar_ec }}"></ec-canvas>
+        <ec-canvas id = 'radar-cancas-id'canvas-id='radar-cancas' tuData="{{randerInfo}}" ec="{{ radar_ec }}"></ec-canvas>
     </view>
   </view>
 </block>
@@ -42,7 +42,7 @@
   </view>
   <view class='content'>
     <view class = 'radar'>
-        <ec-canvas id = 'radar-cancas-id'canvas-id='radar-cancas' ec="{{ radar_ec }}"></ec-canvas>
+        <ec-canvas id = 'radar-cancas-id'canvas-id='radar-cancas' tuData="{{randerInfo}}" ec="{{ radar_ec }}"></ec-canvas>
     </view>
   </view>
 </block>

@@ -1,10 +1,10 @@
 <!--pages/outpatient/outpatient.wxml-->
   <view class='line'>
-      <ec-canvas canvas-id='line-cancas' ec="{{ line_econe }}"></ec-canvas>
+      <ec-canvas id = "line-cancas" canvas-id='line-cancas' ec="{{ line_econe }}"></ec-canvas>
     </view>
     <view class='bar'>
-      <ec-canvas canvas-id='line-cancas' ec="{{ bar_econe }}"></ec-canvas>
-    </view>
+      <ec-canvas id="bar-cancas" canvas-id='bar-cancas'  ec="{{ bar_econe }}"></ec-canvas>
+  </view>
   
 
 

@@ -1,13 +1,13 @@
 // pages/login/login.js
 var Mcaptcha = require('../../utils/mcaptcha.js');
-
+var Parser = require('../../lib/dom-parser.js');
 
 const app = getApp()
 Page({
   data: {
     phone: '',
     password: '',
-    imgCode:''
+    imgCode:'',
   },
 
   /**
@@ -49,7 +49,7 @@ Page({
 
   // 登录 
   login: function () {
-    console.log(this.data.phone);
+    console.log(app.globalData.openId);
     //验证验证码
     var res = this.mcaptcha.validate(this.data.imgCode);
     if (this.data.imgCode == '' || this.data.imgCode == null) {
@@ -85,19 +85,35 @@ Page({
         url: '../index/index',
       })
     }
+    var htmlBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/"><soapenv:Header/><soapenv:Body><tem:Call><tem:type>Dept_List</tem:type><tem:parms></tem:parms></tem:Call></soapenv:Body></soapenv:Envelope>';
+    // var htmlBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">';
+    // htmlBody += '< soapenv: Header/>';
+    // htmlBody += '< soapenv: Body >';
+    // htmlBody += '<tem: Call><tem: type>Dept_List</tem: type ><tem: parms></tem: parms ></tem: Call >';
+    // htmlBody += '</soapenv: Body ></soapenv: Envelope >';
     wx.request({
-      url: '',
-      data:{
-        code: this.data.phone,
-        name: this.data.password
-      },
+      url: 'http://199.199.4.54:8025/Call.asmx?WSDL',
+      data:htmlBody,
       method:'POST',
       header: {
         //设置参数内容类型为json
-        'content-type': 'application/json'
+        'content-type': 'text/xml; charset=utf-8',
+        //'SOAPAction': 'http://tempuri.org/Call'
       },
       success: function (res) {
-          
+        console.log(res);
+        if(res.statusCode == 200){
+          console.log(res.data);
+          var dataxml = res.data;
+          var XMLParser = new Parser.DOMParser();
+          var doc = XMLParser.parseFromString(dataxml);
+          var a = doc.getElementsByTagName('CallResult')['0'];
+          console.log(a.firstChild.nodeValue);
+        }else{
+          console.log('失败');
+        }
+       
+
       },
       fail: function (err) {
         wx.showToast({
