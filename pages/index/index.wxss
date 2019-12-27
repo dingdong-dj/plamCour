@@ -60,3 +60,8 @@ ec-canvas {
   text-decoration-line: underline;
   color: rgb(243, 237, 237);
 }
+
+.number1{
+  color: rgb(230, 217, 217);
+}
+

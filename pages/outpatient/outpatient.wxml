@@ -1,10 +1,50 @@
 <!--pages/outpatient/outpatient.wxml-->
+<view class='content'>
+<block wx:if = "{{role ==1}}">
   <view class='line'>
-      <ec-canvas id = "line-cancas" canvas-id='line-cancas' ec="{{ line_econe }}"></ec-canvas>
-    </view>
-    <view class='bar'>
-      <ec-canvas id="bar-cancas" canvas-id='bar-cancas'  ec="{{ bar_econe }}"></ec-canvas>
+    <ec-canvas id = "line-cancas" canvas-id='line-cancas' ec="{{ line_econe }}"></ec-canvas>
   </view>
+  <view class='bar'>
+    <ec-canvas id="bar-cancas" canvas-id='bar-cancas'  ec="{{ bar_econe }}"></ec-canvas>
+  </view>
+</block>
+<block wx:elif = "{{role == 2}}">
+  <view class='bar1'>
+    <ec-canvas id="bar-cancas-one" canvas-id='bar-cancas'  ec="{{ bar_econ_one }}"></ec-canvas>
+  </view>
+  <view class='title'>按医生统计(上月)</view>
+  <view class="table">
+    <view class="tr bg-w">
+      <view class="th">医生</view>
+      <view class="th">就诊人次</view>
+      <view class="th">均值费</view>
+      <view class="th">药比</view>
+      <view class="th">处方张数</view>
+      <view class="th">基药比</view>
+    </view>
+    <scroll-view scroll-y style="height: 455.33rpx;">
+      <block wx:for="{{listData}}" wx:key="{{code}}">
+        <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+          <view class="td">{{item.emp_name}}</view>
+          <view class="td">{{item.visitcnt}}</view>
+          <view class="td">{{item.avgfee}}</view>
+          <view class="td">{{item.yprate}}</view>
+          <view class="td">{{item.ordercnt}}</view>
+          <view class="td">{{item.jyrate}}</view>
+        </view>
+        <view class="tr" wx:else>
+          <view class="td">{{item.emp_name}}</view>
+          <view class="td">{{item.visitcnt}}</view>
+          <view class="td">{{item.avgfee}}</view>
+          <view class="td">{{item.yprate}}</view>
+          <view class="td">{{item.ordercnt}}</view>
+          <view class="td">{{item.jyrate}}</view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+</block>
+</view>
   
 
 

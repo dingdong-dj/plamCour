@@ -38,3 +38,4 @@ function bodyHtml(type, param) {
   htmlBody += '</tem:parms></tem:Call></soapenv:Body></soapenv:Envelope>';
   return htmlBody;
 }
+

@@ -1,9 +1,18 @@
 <!--index.wxml-->
 <view class='content'>
   <view class='info' wx:for="{{infoList}}" wx:key="infoList123" >
+   
     <view class='info-box'>
       <text class="title12" >{{item.name}}</text>
-      <text class="number" bindtap="bindViewTap" data-number='{{item.name}}' data-title='{{item.name}}'>{{item.value}}</text>
+        <block wx:if="{{item.code == 'G_avg_work_perdoc'}}">
+          <text class='number1'>{{item.value}}</text>
+        </block>
+        <block wx:elif="{{item.code == 'G_mz_wait_time'}}">
+          <text class="number1">{{item.value}}</text>
+        </block>
+        <block wx:else>
+          <text class="number" bindtap="bindViewTap" data-code='{{item.code}}' data-number='{{item.value}}' data-title='{{item.name}}'>{{item.value}}</text>
+        </block>
     </view>
   </view>
 </view>
@@ -14,12 +23,6 @@
         <ec-canvas id="gauge-cancas" canvas-id="gauge-cancas" tuData="{{item}}" ec="{{ gauge }}"></ec-canvas>
       </view>
     </block>
-    <!-- <view class='gauge'>
-        <ec-canvas canvas-id='gugue-cancas-one' ec="{{guage_econe_one}}"></ec-canvas>
-    </view>
-    <view class='gauge'>
-    <ec-canvas canvas-id='gugue-cancas-two' ec="{{ guage_econe_two }}"></ec-canvas>
-    </view> -->
     <block wx:for="{{pieList}}" wx:for-item="item" wx:key = "key">
       <view class='pie'>
         <ec-canvas id="pie-cancas" canvas-id="pie-cancas" tuData="{{item}}" ec="{{ pie }}"></ec-canvas>

@@ -1,9 +1,16 @@
 <!--pages/hospitaliztion/hospitaliztion.wxml-->
 <view class='content'>
-  <view class='bar'>
-    <ec-canvas id="bar-canca" canvas-id='bar-cancas' ec="{{ bar_ec }}"></ec-canvas>
-  </view>
-  <view class='title'>按诊疗组统计本月</view>
+  <block wx:if = "{{role ==1}}">
+     <view class='bar'>
+      <ec-canvas id="bar-canca" canvas-id='bar-cancas' ec="{{ bar_ec }}"></ec-canvas>
+    </view>
+  </block>
+  <block wx:if = "{{role ==2}}">
+    <view class='bar'>
+      <ec-canvas id="bar-canca" canvas-id='bar-cancas' ec="{{ bar_ec }}"></ec-canvas>
+    </view>
+  </block>
+  <view class='title'>按诊疗组统计(上月)</view>
   <view class="table">
     <view class="tr bg-w">
       <view class="th">诊疗组</view>
@@ -35,6 +42,4 @@
     </scroll-view>
   </view>
 </view>
-
-
 

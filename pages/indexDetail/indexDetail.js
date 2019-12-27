@@ -1,4 +1,8 @@
 // pages/indexDetail/indexDetail.js
+var util = require('../../utils/util.js');
+var Parser = require('../../lib/dom-parser.js');
+
+const app = getApp();     
 Page({
 
   /**
@@ -6,17 +10,38 @@ Page({
    */
   data: {
     type:"",
-    listData: [{ name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" },{ name: "1科", value: "1234" }]
+    // listData: [{ name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" }, { name: "1科", value: "1234" },{ name: "1科", value: "1234" }]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that = this;
     this.setData({
       type: options.title,
     });
-   
+    var url = app.globalData.url;
+    var time = options.time;
+    var code = options.code;
+    this.setData({
+      code:code
+    })
+    var htmlBody = util.bodyHtml("PointData_Dept", '{"pnt_code":"' + code + '","cmonth":'+time+'}') 
+    wx.request({
+      url: url,
+      data: htmlBody,
+      method: 'POST',
+      header: {
+        'content-type': 'text/xml; charset=utf-8',
+      },
+      success: function (res) {
+        var data = xmlToJson(res.data);
+        that.setData({
+          listData:data
+        })
+      }
+    })
 
   },
 
@@ -69,3 +94,14 @@ Page({
 
   }
 })
+
+
+//xml转json
+function xmlToJson(xml) {
+  var dataxml = xml;
+  var XMLParser = new Parser.DOMParser();
+  var doc = XMLParser.parseFromString(dataxml);
+  var a = doc.getElementsByTagName('CallResult')['0'];
+  var b = a.firstChild.nodeValue;
+  return JSON.parse(b);
+}

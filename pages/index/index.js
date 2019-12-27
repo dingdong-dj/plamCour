@@ -11,11 +11,7 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    infoList: [{ name: "在院人数", value: 0 }, { name: "就诊人数", value: 0 }, { name: "预约挂号", value: 0 }, { name: "手术台数", value: 0 }],
-    // infoList: [{ title: "在科人数", number: 45 }, { title: "门诊就诊", number: 66 }, { title: "入院人次", number: 200 }, { title: "出院人次", number: 55 }],
-    // infoList: [{ title: "在科人数", number: 23 }, { title: "昨日就诊", number: 66 }, { title: "昨天收治", number: 23 }, { title: "昨天处方", number: 67 }, { title: "昨日诊察费", number: 1298 }, { title: "昨日检查费", number: 4567 }],
-    gaugeList: [{ title: "抗菌使用率", data: 10 }, { title: "基药使用率", data: 25 }, { title: "床位使用率", data: 85 }, { title: "药比", data: 75 }, { title: "平均床日数", data: 60 }, { title: "平均处方金额", data: 65 }],
-    // randerInfo:[0,0,0,0],
+    // infoList: [{ name: "在院人数", value: 0 }, { name: "就诊人数", value: 0 }, { name: "预约挂号", value: 0 }, { name: "手术台数", value: 0 }],
     radar_ec: {
       lazyLoad: true // 延迟加载
     },
@@ -25,73 +21,123 @@ Page({
     pie: {
       onInit: initPie//公共饼图
     },
-    role:1,
+    role:null,
   },
+ 
   onLoad: function () {
+    var role = app.globalData.role;
+    this.setData({
+      role:role
+    })
     var url = app.globalData.url;
     var that = this;
     var nowTime = new Date();
     nowTime.setTime(nowTime.getTime() - 24 * 60 * 60 * 1000);
     var time = nowTime.getFullYear() + "" + (nowTime.getMonth() + 1) + "" + nowTime.getDate();
-    var htmlBody = util.bodyHtml("Leader_FirstPage", '{"date":' + time + '}');
-    wx.request({
-      url: url,
-      data: htmlBody,
-      method: 'POST',
-      header: {
-        //设置参数内容类型为json
-        'content-type': 'text/xml; charset=utf-8',
-        //'SOAPAction': 'http://tempuri.org/Call'
-      },
-      success: function (res) {
-        var pieList =[];
-        var data = xmlToJson(res.data);
-        console.log(data);
-        for(var index in data){
-          if(data[index].type== "1"){
-            that.setData({
-              infoList:data[index].list
-            })
-          }else if(data[index].type == "2"){
-            that.setData({
-              gaugeList1:data[index].list
-            })
-          }else if(data[index].type == "3"){
-            var name = [];
-            var value =[];
-            var list = data[index].list;
-            for(var i in list){
-              name.push(list[i].name);
-              value.push(list[i].value);
+    if(role == 1){
+      var htmlBody = util.bodyHtml("Leader_FirstPage", '{"date":' + time + '}');
+      wx.request({
+        url: url,
+        data: htmlBody,
+        method: 'POST',
+        header: {
+          //设置参数内容类型为json
+          'content-type': 'text/xml; charset=utf-8',
+          //'SOAPAction': 'http://tempuri.org/Call'
+        },
+        success: function (res) {
+          var pieList = [];
+          var data = xmlToJson(res.data);
+          for (var index in data) {
+            if (data[index].type == "1") {
+              console.log(data[index].list);
+              that.setData({
+                infoList: data[index].list
+              })
+            } else if (data[index].type == "2") {
+              that.setData({
+                gaugeList1: data[index].list
+              })
+            } else if (data[index].type == "3") {
+              var name = [];
+              var value = [];
+              var list = data[index].list;
+              for (var i in list) {
+                name.push(list[i].name);
+                value.push(list[i].value);
+              }
+              pieList.push({ title: "昨日住院/门诊收入", name: name, value: value });
+            } else if (data[index].type == "4") {
+              var name = [];
+              var value = [];
+              var list = data[index].list;
+              for (var i in list) {
+                name.push(list[i].name);
+                value.push(list[i].value);
+              }
+              pieList.push({ title: "昨日门/急诊人次", name: name, value: value });
+            } else if (data[index].type == "5") {
+              var list = data[index].list;
+              var name = [];
+              var value = [];
+              for (var i in list) {
+                name.push(list[i].name);
+                value.push(list[i].value);
+              }
+              randerList = { name: name.slice(1), value: value.slice(1) };
+              that.echartsComponnet = that.selectComponent('#radar-cancas-id');
+              that.init_echarts();
             }
-            pieList.push({ title: "昨日住院/门诊收入",name:name,value:value});
-          }else if(data[index].type == "4"){
-            var name = [];
-            var value = [];
-            var list = data[index].list;
-            for (var i in list) {
-              name.push(list[i].name);
-              value.push(list[i].value);
+          }
+          that.setData({
+            pieList: pieList
+          })
+        }
+      })
+    }else if(role ==2){
+      var code = app.globalData.deptCode;
+      var htmlBody = util.bodyHtml("Director_FirstPage", '{"date":' + time + ',"dept_code":'+code+'}');
+      wx.request({
+        url: url,
+        data: htmlBody,
+        method: 'POST',
+        header: {
+          //设置参数内容类型为json
+          'content-type': 'text/xml; charset=utf-8',
+          //'SOAPAction': 'http://tempuri.org/Call'
+        },
+        success: function (res) {
+          var data = xmlToJson(res.data);
+          console.log(data);
+          for(var index in data){
+            if (data[index].type == "1") {
+              console.log(data[index]);
+              that.setData({
+                infoList: data[index].list
+              })
+            }else if(data[index].type == "2"){
+              that.setData({
+                gaugeList: data[index].list
+              })
+            }else if(data[index].type == "3"){
+              var list = data[index].list;
+              var name = [];
+              var value = [];
+              for (var i in list) {
+                name.push(list[i].name);
+                value.push(list[i].value);
+              }
+              randerList = { name: name.slice(1), value: value.slice(1) };
+              that.echartsComponnet = that.selectComponent('#radar-cancas-id');
+              that.init_echarts();
             }
-            pieList.push({ title: "昨日门/急诊人次", name: name, value: value });
-          }else if(data[index].type == "5"){
-            var list = data[index].list;
-            var name = [];
-            var value = [];
-            for(var i in list){
-              name.push(list[i].name);
-              value.push(list[i].value);
-            }
-            randerList = {name:name.slice(1),value:value.slice(1)};
-            that.echartsComponnet = that.selectComponent('#radar-cancas-id');
-            that.init_echarts();
           }
         }
-        that.setData({
-          pieList:pieList
-        })
-      }
-    })
+      })
+
+    }
+    
+    
   },
 
   init_echarts: function () {
@@ -107,8 +153,15 @@ Page({
     });
   },
   getOption:function(){
-    console.log(randerList.name);
     var name = randerList.name;
+    var indicator;
+    if(this.data.role == 1){
+      indicator = [{ name: name[0], max: 300 },{ name: name[1], max: 300 },{ name: name[2], max: 300 },
+        { name: name[3], max: 300 }];
+    }else {
+      indicator = [{ name: name[0], max: 40 }, { name: name[1], max: 40 }, { name: name[2], max: 40 },
+        { name: name[3], max: 40 }];
+    }
     var option = {
       title: {
         text: "昨日住院人次统计",
@@ -117,12 +170,7 @@ Page({
         }
       },
       radar: {
-        indicator: [
-          { name: name[0], max: 300 },
-          { name: name[1], max: 300 },
-          { name: name[2], max: 300 },
-          { name: name[3], max: 300 }
-        ],
+        indicator: indicator,
       },
 
       series: [{
@@ -158,14 +206,26 @@ Page({
   //   }
   // },
   bindViewTap:function(e){
+    var nowTime = new Date();
+    nowTime.setTime(nowTime.getTime() - 24 * 60 * 60 * 1000);
+    var time = nowTime.getFullYear() + "" + (nowTime.getMonth() + 1) + "" + nowTime.getDate();
     var title = e.currentTarget.dataset.title;
     var number = e.currentTarget.dataset.number;
-    wx.navigateTo({
-      url: '../indexDetail/indexDetail?title='+title+'&number='+number
-    })
+    var code = e.currentTarget.dataset.code;
+    if(this.data.role == 1){
+      wx.navigateTo({
+        url: '../indexDetail/indexDetail?title=' + title + '&time=' + time+'&code='+code
+      })
+    }
+  
   },
 
 })
+function initRole() {
+  var role = app.globalData.role;
+  console.log(role);
+  return role;
+}
 
 //雷达图
 function initChart(canvas, width, height) {
@@ -188,15 +248,6 @@ function initChart(canvas, width, height) {
         { name: "转科人数", max: 300 },
         { name: "入院人数", max: 300 }
       ],
-    
-      // splitArea: {
-      //   show: true,
-      //   areaStyle: {
-      //     color: ['rgba(114, 172, 209, 0.6)', 'rgba(114, 172, 209,0.8)'], // 图表背景网格的颜色
-      //       shadowColor: 'rgba(0, 0, 0, 0.3)',
-      //       shadowBlur: 10
-      //   }
-      // },
     },
     
     series: [{

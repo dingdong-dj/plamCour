@@ -56,5 +56,7 @@ App({
     appSecret:"45c75145584a48255603b1fc9e0b5faa",
     openId:"",
     url: 'http://199.199.4.54:8025/wxCall.asmx?WSDL',
+    role:1,
+    deptCode: "10000001"
   }
 })

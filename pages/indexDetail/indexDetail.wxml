@@ -2,17 +2,32 @@
   <view class="title">{{type}}详细列表 </view>
   <view class="table">
     <view class="tr bg-w">
-        <view class="th">科室</view>
-        <view class="th">人数</view>
+        <view class ='th'>科室代码</view>
+        <view class="th">科室名称</view>
+        <block wx:if="{{code == 'B_zy_op_totalnum'}}">
+          <view class="th">手术台数</view>
+        </block>
+        <block wx:elif="{{code == 'B_zy_day_avg'}}">
+          <view class="th">平均床日数</view>
+        </block>
+         <block wx:elif="{{code == 'B_mz_fee_avg'}}">
+          <view class="th">均次费用</view>
+        </block>
+        <block  wx:else>
+          <view class="th">人数</view>
+        </block>
+        
     </view>
     <scroll-view scroll-y style="height: 1000rpx;">
       <block wx:for="{{listData}}" wx:key="{{code}}">
         <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
-          <view class="td">{{item.name}}</view>
+          <view class='td'>{{item.dept_code}}</view>
+          <view class="td">{{item.dept_name}}</view>
           <view class="td">{{item.value}}</view>
         </view>
         <view class="tr" wx:else>
-          <view class="td">{{item.name}}</view>
+          <view class='td'>{{item.dept_code}}</view>
+          <view class="td">{{item.dept_name}}</view>
           <view class="td">{{item.value}}</view>
         </view>
       </block>
