@@ -19,7 +19,7 @@
         
     </view>
     <scroll-view scroll-y style="height: 1000rpx;">
-      <block wx:for="{{listData}}" wx:key="{{code}}">
+      <block wx:for="{{listData}}" wx:key="index">
         <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
           <view class='td'>{{item.dept_code}}</view>
           <view class="td">{{item.dept_name}}</view>

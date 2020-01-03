@@ -21,7 +21,7 @@
       <view class="th">基药比</view>
     </view>
     <scroll-view scroll-y style="height: 455.33rpx;">
-      <block wx:for="{{listData}}" wx:key="{{code}}">
+      <block wx:for="{{listData}}" wx:key="index">
         <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
           <view class="td">{{item.group_name}}</view>
           <view class="td">{{item.outcnt}}</view>

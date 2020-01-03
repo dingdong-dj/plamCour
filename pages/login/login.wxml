@@ -7,7 +7,7 @@
   <view class="login-from"> 
   
  <!--账号-->
-  <view class="inputView"> 
+  <view class="inputView">
     <image class="nameImage" src="../../images/no.png"></image> 
     <label class="loginLab">工号</label> 
     <input class="inputText" placeholder="请输入工号" bindinput="phoneInput" /> 
